@@ -27,11 +27,16 @@
             <li class="scroll-to-section"><a href="./">Beranda</a></li>
             <li class="scroll-to-section"><a href="konsultasi">Konsultasi</a></li>
             <li class="scroll-to-section"><a href="daftar-penyakit">Daftar Penyakit</a></li>
-            <li class="scroll-to-section"><a href="solusi">Solusi</a></li>
             <li class="scroll-to-section"><a href="informasi">Informasi</a></li>
-            <li>
-              <div class="gradient-button"><a href="auth/"><i class="fa fa-sign-in-alt"></i> Masuk</a></div>
-            </li>
+            <?php if (!isset($_SESSION['data-user'])) { ?>
+              <li>
+                <div class="gradient-button"><a href="auth/"><i class="fa fa-sign-in-alt"></i> Masuk</a></div>
+              </li>
+            <?php } else if (isset($_SESSION['data-user'])) { ?>
+              <li>
+                <div class="gradient-button"><a href="auth/signout"><i class="fa fa-sign-out-alt"></i> Keluar</a></div>
+              </li>
+            <?php } ?>
           </ul>
           <a class='menu-trigger'>
             <span>Menu</span>

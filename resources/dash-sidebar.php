@@ -26,22 +26,34 @@
       if ($_SESSION['data-user']['role'] == 2) { ?>
         <li class="nav-item nav-category">Data Pakar</li>
         <li class="nav-item">
+          <a class="nav-link" style="cursor: pointer;" onclick="window.location.href='penyakit'">
+            <i class="mdi mdi-heart-pulse menu-icon"></i>
+            <span class="menu-title">Penyakit</span>
+          </a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" style="cursor: pointer;" onclick="window.location.href='gejala'">
             <i class="mdi mdi-loupe menu-icon"></i>
             <span class="menu-title">Gejala</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" style="cursor: pointer;" onclick="window.location.href='penyakit'">
-            <i class="mdi mdi-heart-pulse menu-icon"></i>
-            <span class="menu-title">Penyakit</span>
+          <a class="nav-link" style="cursor: pointer;" onclick="window.location.href='solusi'">
+            <i class="mdi mdi-stethoscope menu-icon"></i>
+            <span class="menu-title">Solusi</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="cursor: pointer;" onclick="window.location.href='obat'">
+            <i class="mdi mdi-bowl menu-icon"></i>
+            <span class="menu-title">Obat</span>
           </a>
         </li>
       <?php } ?>
       <li class="nav-item">
-        <a class="nav-link" style="cursor: pointer;" onclick="window.location.href='prediksi'">
+        <a class="nav-link" style="cursor: pointer;" onclick="window.location.href='klasifikasi'">
           <i class="mdi mdi-flask-outline menu-icon"></i>
-          <span class="menu-title">Prediksi</span>
+          <span class="menu-title">Klasifikasi</span>
         </a>
       </li>
       <li class="nav-item">
@@ -54,19 +66,19 @@
     if ($_SESSION['data-user']['role'] == 1) { ?>
       <li class="nav-item nav-category">Data Lainnya</li>
       <li class="nav-item">
-        <a class="nav-link" style="cursor: pointer;" onclick="window.location.href='atribut'">
+        <a class="nav-link" style="cursor: pointer;" onclick="window.location.href='informasi'">
           <i class="mdi mdi-format-list-bulleted menu-icon"></i>
-          <span class="menu-title">Atribut</span>
+          <span class="menu-title">Informasi</span>
         </a>
       </li>
     <?php } ?>
     <li class="nav-item nav-category"></li>
-    <li class="nav-item">
+    <!-- <li class="nav-item">
       <a class="nav-link" style="cursor: pointer;" onclick="window.location.href='icons'">
         <i class="mdi mdi-face-profile menu-icon"></i>
         <span class="menu-title">Icons</span>
       </a>
-    </li>
+    </li> -->
     <li class="nav-item">
       <a class="nav-link" style="cursor: pointer;" onclick="window.location.href='../auth/signout'">
         <i class="mdi mdi-logout-variant menu-icon"></i>
