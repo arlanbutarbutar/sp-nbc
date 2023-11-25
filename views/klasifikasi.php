@@ -80,7 +80,7 @@ $_SESSION["page-url"] = "klasifikasi";
                               </li>
                               <li class="nav-item">
                                 <form action="" method="post">
-                                  <button type="submit" name="reset-hitung" class="nav-link border-0 bg-transparent">
+                                  <button type="submit" name="reset-diagnosa" class="nav-link border-0 bg-transparent">
                                     <i class="mdi mdi-refresh menu-icon text-dark"></i>
                                     <span class="menu-title text-dark">Reset</span>
                                   </button>
@@ -108,15 +108,6 @@ $_SESSION["page-url"] = "klasifikasi";
                                     <input type="text" name="nama" class="form-control text-center" id="nama" minlength="3" placeholder="Nama Pasien" required>
                                   </div>
                                   <div class="mb-3">
-                                    <label for="id_rawat" class="form-label">Rawat <small class="text-danger">*</small></label>
-                                    <select name="id_rawat" class="form-control" aria-label="Default select example" required>
-                                      <option selected value="">Pilih Rawat</option>
-                                      <?php foreach ($selectRawat as $row_rawat) : ?>
-                                        <option value="<?= $row_rawat['id_rawat'] ?>"><?= $row_rawat['rawat'] ?></option>
-                                      <?php endforeach; ?>
-                                    </select>
-                                  </div>
-                                  <div class="mb-3">
                                     <label for="id_jenis_kelamin" class="form-label">Jenis Kelamin <small class="text-danger">*</small></label>
                                     <select name="id_jenis_kelamin" class="form-control" aria-label="Default select example" required>
                                       <option selected value="">Pilih Jenis Kelamin</option>
@@ -135,13 +126,8 @@ $_SESSION["page-url"] = "klasifikasi";
                                     </select>
                                   </div>
                                   <div class="mb-3">
-                                    <label for="id_idap" class="form-label">Lama Idap <small class="text-danger">*</small></label>
-                                    <select name="id_idap" class="form-control" aria-label="Default select example" required>
-                                      <option selected value="">Pilih Lama Idap</option>
-                                      <?php foreach ($selectLama_idap as $row_li) : ?>
-                                        <option value="<?= $row_li['id_idap'] ?>"><?= $row_li['lama_idap'] ?></option>
-                                      <?php endforeach; ?>
-                                    </select>
+                                    <label for="alamat" class="form-label">Alamat <small class="text-danger">*</small></label>
+                                    <input type="text" name="alamat" class="form-control text-center" id="alamat" minlength="3" placeholder="Alamat" required>
                                   </div>
                                   <div class="mb-3 text-center">
                                     <button type="submit" name="data-uji" class="btn btn-primary text-white me-0 rounded-0 mt-3">Submit</button>
@@ -156,11 +142,6 @@ $_SESSION["page-url"] = "klasifikasi";
                         // Inisialisasi Data Session
                         $nama = valid($_SESSION['data-klasifikasi']['nama']);
 
-                        $id_rawat = valid($_SESSION['data-klasifikasi']['id_rawat']);
-                        $takeRawat = mysqli_query($conn, "SELECT * FROM rawat WHERE id_rawat='$id_rawat'");
-                        $rowTakeRawat = mysqli_fetch_assoc($takeRawat);
-                        $rawat = $rowTakeRawat['rawat'];
-
                         $id_jenis_kelamin = valid($_SESSION['data-klasifikasi']['id_jenis_kelamin']);
                         $takeJK = mysqli_query($conn, "SELECT * FROM jenis_kelamin WHERE id_jenis_kelamin='$id_jenis_kelamin'");
                         $rowTakeJK = mysqli_fetch_assoc($takeJK);
@@ -171,10 +152,7 @@ $_SESSION["page-url"] = "klasifikasi";
                         $rowTakeUsia = mysqli_fetch_assoc($takeUsia);
                         $usia = $rowTakeUsia['usia'];
 
-                        $id_idap = valid($_SESSION['data-klasifikasi']['id_idap']);
-                        $takeIdap = mysqli_query($conn, "SELECT * FROM lama_idap WHERE id_idap='$id_idap'");
-                        $rowTakeIdap = mysqli_fetch_assoc($takeIdap);
-                        $lama_idap = $rowTakeIdap['lama_idap'];
+                        $alamat = valid($_SESSION['data-klasifikasi']['alamat']);
 
                         if (isset($_GET['to'])) {
                           if ($_GET['to'] == "data-uji") { ?>
@@ -195,11 +173,6 @@ $_SESSION["page-url"] = "klasifikasi";
                                           <td><?= $nama ?></td>
                                         </tr>
                                         <tr>
-                                          <th scope="row" style="width: 200px;">Rawat</th>
-                                          <td style="width: 10px;">:</td>
-                                          <td><?= $rawat ?></td>
-                                        </tr>
-                                        <tr>
                                           <th scope="row" style="width: 200px;">Jenis Kelamin</th>
                                           <td style="width: 10px;">:</td>
                                           <td><?= $jenis_kelamin ?></td>
@@ -210,9 +183,9 @@ $_SESSION["page-url"] = "klasifikasi";
                                           <td><?= $usia ?></td>
                                         </tr>
                                         <tr>
-                                          <th scope="row" style="width: 200px;">Lama Idap</th>
+                                          <th scope="row" style="width: 200px;">Alamat</th>
                                           <td style="width: 10px;">:</td>
-                                          <td><?= $lama_idap ?></td>
+                                          <td><?= $alamat ?></td>
                                         </tr>
                                       </tbody>
                                     </table>
@@ -254,10 +227,9 @@ $_SESSION["page-url"] = "klasifikasi";
                                           </tbody>
                                         </table>
                                         <input type="hidden" name="nama" value="<?= $nama ?>">
-                                        <input type="hidden" name="id_rawat" value="<?= $id_rawat ?>">
                                         <input type="hidden" name="id_jenis_kelamin" value="<?= $id_jenis_kelamin ?>">
                                         <input type="hidden" name="id_usia" value="<?= $id_usia ?>">
-                                        <input type="hidden" name="id_idap" value="<?= $id_idap ?>">
+                                        <input type="hidden" name="alamat" value="<?= $alamat ?>">
                                         <button type="submit" name="klasifikasi" class="btn btn-primary btn-sm rounded-0 text-white border-0 mt-3" style="height: 30px;">Klasifikasi</button>
                                       </form>
                                     <?php }
@@ -310,10 +282,9 @@ $_SESSION["page-url"] = "klasifikasi";
                                         <tr>
                                           <th scope="col" class="text-center">#</th>
                                           <th scope="col" class="text-center">Nama</th>
-                                          <th scope="col" class="text-center">Jenis Rawat</th>
                                           <th scope="col" class="text-center">Jenis Kelamin</th>
                                           <th scope="col" class="text-center">Usia</th>
-                                          <th scope="col" class="text-center">Lama Idap</th>
+                                          <th scope="col" class="text-center">Alamat</th>
                                           <th scope="col" class="text-center">Penyakit</th>
                                         </tr>
                                       </thead>
@@ -324,10 +295,9 @@ $_SESSION["page-url"] = "klasifikasi";
                                             <tr>
                                               <th scope="row"><?= $no; ?></th>
                                               <td><?= $row["nama"] ?></td>
-                                              <td><?= $row["rawat"] ?></td>
                                               <td><?= $row["jenis_kelamin"] ?></td>
                                               <td><?= $row["usia"] ?></td>
-                                              <td><?= $row["lama_idap"] ?></td>
+                                              <td><?= $row["alamat"] ?></td>
                                               <td><?= $row["nama_penyakit"] ?></td>
                                             </tr>
                                         <?php $no++;
@@ -342,12 +312,11 @@ $_SESSION["page-url"] = "klasifikasi";
                           <?php }
                           if ($_GET['to'] == "hasil-klasifikasi") {
                             $nama = valid($_SESSION['data-klasifikasi']['nama']);
-                            $id_rawat = valid($_SESSION['data-klasifikasi']['id_rawat']);
                             $id_jenis_kelamin = valid($_SESSION['data-klasifikasi']['id_jenis_kelamin']);
                             $id_usia = valid($_SESSION['data-klasifikasi']['id_usia']);
-                            $id_idap = valid($_SESSION['data-klasifikasi']['id_idap']);
+                            $alamat = valid($_SESSION['data-klasifikasi']['alamat']);
 
-                            $data_klasifikasi = bayes($nama, $id_rawat, $id_jenis_kelamin, $id_usia, $id_idap);
+                            $data_klasifikasi = bayes($nama, $id_jenis_kelamin, $id_usia, $alamat);
                           ?>
                             <div class="row">
                               <div class="col-md-12">
@@ -366,7 +335,7 @@ $_SESSION["page-url"] = "klasifikasi";
                                         $gejalaList = implode("', '", $gejala_checklist);
                                         $sqlChecklist = "SELECT * FROM gejala WHERE id_gejala IN ('$gejalaList')";
                                         $resultChecklist = mysqli_query($conn, $sqlChecklist); ?>
-                                        <table class="table table-striped table-hover table-borderless table-sm display">
+                                        <table class="table table-striped table-hover table-borderless table-sm">
                                           <thead>
                                             <tr>
                                               <th scope="col"></th>
@@ -379,7 +348,7 @@ $_SESSION["page-url"] = "klasifikasi";
                                               <tr>
                                                 <th scope="row">
                                                   <div class="form-check">
-                                                    <input class="form-check-input" style="margin-left: 0;font-size: 20px;" type="checkbox" checked>
+                                                    <input class="form-check-input" style="margin-left: 0;font-size: 20px;" type="checkbox" disabled checked>
                                                   </div>
                                                 </th>
                                                 <td class="text-center"><?= $rowChecklist["kode_gejala"] ?></td>
@@ -500,9 +469,6 @@ $_SESSION["page-url"] = "klasifikasi";
                                         <p style="font-size: 16px;"><strong>Solusi</strong> dari penyakit ini yaitu <?php $solusi = mysqli_query($conn, "SELECT * FROM penyakit JOIN solusi ON penyakit.id_penyakit=solusi.id_penyakit WHERE penyakit.nama_penyakit='$nama_penyakit'");
                                                                                                                     $rowSolusi = mysqli_fetch_assoc($solusi);
                                                                                                                     echo $rowSolusi['solusi']; ?></p>
-                                        <p style="font-size: 16px;"><strong>Penyembuhan</strong> yang dapat membantu yaitu <?php $obat = mysqli_query($conn, "SELECT * FROM penyakit JOIN obat ON penyakit.id_penyakit=obat.id_penyakit WHERE penyakit.nama_penyakit='$nama_penyakit'");
-                                                                                                                            $rowSolusi = mysqli_fetch_assoc($obat);
-                                                                                                                            echo $rowSolusi['obat']; ?></p>
                                         <form action="" method="post">
                                           <button type="submit" name="reset-diagnosa" class="btn btn-primary border-0 rounded-0 text-white"><i class="fa fa-refresh" aria-hidden="true"></i> Reset</button>
                                         </form>

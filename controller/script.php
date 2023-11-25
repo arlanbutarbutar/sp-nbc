@@ -37,33 +37,31 @@ if (!isset($_SESSION["data-user"])) {
   $selectLama_idap = mysqli_query($conn, "SELECT * FROM lama_idap");
   if (isset($_POST['konsultasi'])) {
     $nama = valid($_POST['nama']);
-    $id_rawat = valid($_POST['id_rawat']);
     $id_jenis_kelamin = valid($_POST['id_jenis_kelamin']);
     $id_usia = valid($_POST['id_usia']);
-    $id_idap = valid($_POST['id_idap']);
+    $alamat = valid($_POST['alamat']);
     $akses = 1;
     $_SESSION['data-konsultasi'] = [
       'nama' => $nama,
-      'id_rawat' => $id_rawat,
       'id_jenis_kelamin' => $id_jenis_kelamin,
       'id_usia' => $id_usia,
-      'id_idap' => $id_idap,
+      'alamat' => $alamat,
       'akses' => $akses
     ];
-    header("Location: " . $_SESSION["page-url"]);
+    header("Location: konsultasi");
     exit();
   }
   if (isset($_POST["klasifikasi"])) {
     if (klasifikasi($_POST) > 0) {
       $_SESSION["message-success"] = "Berhasil di klasifikasi silakan lihat hasilnya";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: konsultasi");
       exit();
     }
   }
   if (isset($_POST['reset-diagnosa'])) {
     unset($_SESSION['data-konsultasi']);
-    header("Location: " . $_SESSION["page-url"]);
+    header("Location: konsultasi");
     exit();
   }
 
@@ -87,7 +85,7 @@ if (isset($_SESSION["data-user"])) {
     if (edit_profile($_POST) > 0) {
       $_SESSION["message-success"] = "Profil akun anda berhasil di ubah.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: profil");
       exit();
     }
   }
@@ -98,7 +96,7 @@ if (isset($_SESSION["data-user"])) {
     if (add_user($_POST) > 0) {
       $_SESSION["message-success"] = "Data pengguna berhasil ditambahkan.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: users");
       exit();
     }
   }
@@ -106,7 +104,7 @@ if (isset($_SESSION["data-user"])) {
     if (edit_user($_POST) > 0) {
       $_SESSION["message-success"] = "Data pengguna berhasil diubah.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: users");
       exit();
     }
   }
@@ -114,7 +112,7 @@ if (isset($_SESSION["data-user"])) {
     if (delete_user($_POST) > 0) {
       $_SESSION["message-success"] = "Data pengguna berhasil dihapus.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: users");
       exit();
     }
   }
@@ -129,12 +127,10 @@ if (isset($_SESSION["data-user"])) {
     }
   }
 
-  $data_latih = mysqli_query($conn, "SELECT data_latih.*, rawat.rawat, jenis_kelamin.jenis_kelamin, usia.usia, penyakit.nama_penyakit, lama_idap.lama_idap FROM data_latih
-    JOIN rawat ON data_latih.id_rawat=rawat.id_rawat
+  $data_latih = mysqli_query($conn, "SELECT data_latih.*, jenis_kelamin.jenis_kelamin, usia.usia, penyakit.nama_penyakit FROM data_latih
     JOIN jenis_kelamin ON data_latih.id_jenis_kelamin=jenis_kelamin.id_jenis_kelamin
     JOIN usia ON data_latih.id_usia=usia.id_usia
     JOIN penyakit ON data_latih.id_penyakit=penyakit.id_penyakit
-    JOIN lama_idap ON data_latih.id_lama_idap=lama_idap.id_idap
   ");
   $selectRawat = mysqli_query($conn, "SELECT * FROM rawat");
   $selectJenis_kelamin = mysqli_query($conn, "SELECT * FROM jenis_kelamin");
@@ -145,7 +141,7 @@ if (isset($_SESSION["data-user"])) {
     if (add_data_latih($_POST) > 0) {
       $_SESSION["message-success"] = "Data pengguna berhasil ditambahkan.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: data-latih");
       exit();
     }
   }
@@ -153,7 +149,7 @@ if (isset($_SESSION["data-user"])) {
     if (edit_data_latih($_POST) > 0) {
       $_SESSION["message-success"] = "Data pengguna berhasil diubah.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: data-latih");
       exit();
     }
   }
@@ -161,7 +157,7 @@ if (isset($_SESSION["data-user"])) {
     if (delete_data_latih($_POST) > 0) {
       $_SESSION["message-success"] = "Data pengguna berhasil dihapus.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: data-latih");
       exit();
     }
   }
@@ -171,7 +167,7 @@ if (isset($_SESSION["data-user"])) {
     if (add_penyakit($_POST) > 0) {
       $_SESSION["message-success"] = "Data penyakit berhasil ditambahkan.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: penyakit");
       exit();
     }
   }
@@ -179,7 +175,7 @@ if (isset($_SESSION["data-user"])) {
     if (edit_penyakit($_POST) > 0) {
       $_SESSION["message-success"] = "Data penyakit berhasil diubah.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: penyakit");
       exit();
     }
   }
@@ -187,7 +183,7 @@ if (isset($_SESSION["data-user"])) {
     if (delete_penyakit($_POST) > 0) {
       $_SESSION["message-success"] = "Data penyakit berhasil dihapus.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: penyakit");
       exit();
     }
   }
@@ -197,7 +193,7 @@ if (isset($_SESSION["data-user"])) {
     if (add_gejala($_POST) > 0) {
       $_SESSION["message-success"] = "Data gejala berhasil ditambahkan.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: gejala");
       exit();
     }
   }
@@ -205,7 +201,7 @@ if (isset($_SESSION["data-user"])) {
     if (edit_gejala($_POST) > 0) {
       $_SESSION["message-success"] = "Data gejala berhasil diubah.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: gejala");
       exit();
     }
   }
@@ -213,7 +209,7 @@ if (isset($_SESSION["data-user"])) {
     if (delete_gejala($_POST) > 0) {
       $_SESSION["message-success"] = "Data gejala berhasil dihapus.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: gejala");
       exit();
     }
   }
@@ -223,7 +219,7 @@ if (isset($_SESSION["data-user"])) {
     if (add_solusi($_POST) > 0) {
       $_SESSION["message-success"] = "Data solusi berhasil ditambahkan.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: solusi");
       exit();
     }
   }
@@ -231,7 +227,7 @@ if (isset($_SESSION["data-user"])) {
     if (edit_solusi($_POST) > 0) {
       $_SESSION["message-success"] = "Data solusi berhasil diubah.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: solusi");
       exit();
     }
   }
@@ -239,7 +235,7 @@ if (isset($_SESSION["data-user"])) {
     if (delete_solusi($_POST) > 0) {
       $_SESSION["message-success"] = "Data solusi berhasil dihapus.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: solusi");
       exit();
     }
   }
@@ -249,7 +245,7 @@ if (isset($_SESSION["data-user"])) {
     if (add_obat($_POST) > 0) {
       $_SESSION["message-success"] = "Data obat berhasil ditambahkan.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: obat");
       exit();
     }
   }
@@ -257,7 +253,7 @@ if (isset($_SESSION["data-user"])) {
     if (edit_obat($_POST) > 0) {
       $_SESSION["message-success"] = "Data obat berhasil diubah.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: obat");
       exit();
     }
   }
@@ -265,24 +261,22 @@ if (isset($_SESSION["data-user"])) {
     if (delete_obat($_POST) > 0) {
       $_SESSION["message-success"] = "Data obat berhasil dihapus.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: obat");
       exit();
     }
   }
 
   if (isset($_POST['data-uji'])) {
     $nama = valid($_POST['nama']);
-    $id_rawat = valid($_POST['id_rawat']);
     $id_jenis_kelamin = valid($_POST['id_jenis_kelamin']);
     $id_usia = valid($_POST['id_usia']);
-    $id_idap = valid($_POST['id_idap']);
+    $alamat = valid($_POST['alamat']);
     $akses = 1;
     $_SESSION['data-klasifikasi'] = [
       'nama' => $nama,
-      'id_rawat' => $id_rawat,
       'id_jenis_kelamin' => $id_jenis_kelamin,
       'id_usia' => $id_usia,
-      'id_idap' => $id_idap,
+      'alamat' => $alamat,
       'akses' => $akses
     ];
     header("Location: klasifikasi?to=data-uji");
@@ -302,18 +296,16 @@ if (isset($_SESSION["data-user"])) {
     exit();
   }
 
-  $data_uji = mysqli_query($conn, "SELECT data_uji.*, rawat.rawat, jenis_kelamin.jenis_kelamin, usia.usia, penyakit.nama_penyakit, lama_idap.lama_idap FROM data_uji
-    JOIN rawat ON data_uji.id_rawat=rawat.id_rawat
+  $data_uji = mysqli_query($conn, "SELECT data_uji.*, jenis_kelamin.jenis_kelamin, usia.usia, penyakit.nama_penyakit FROM data_uji
     JOIN jenis_kelamin ON data_uji.id_jenis_kelamin=jenis_kelamin.id_jenis_kelamin
     JOIN usia ON data_uji.id_usia=usia.id_usia
     JOIN penyakit ON data_uji.id_penyakit=penyakit.id_penyakit
-    JOIN lama_idap ON data_uji.id_lama_idap=lama_idap.id_idap
   ");
   if (isset($_POST["hapus-data-uji"])) {
     if (delete_data_uji($_POST) > 0) {
       $_SESSION["message-success"] = "Data uji berhasil dihapus.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: laporan");
       exit();
     }
   }
@@ -323,7 +315,7 @@ if (isset($_SESSION["data-user"])) {
     if (add_informasi($_POST) > 0) {
       $_SESSION["message-success"] = "Data informasi berhasil ditambahkan.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: informasi");
       exit();
     }
   }
@@ -331,7 +323,7 @@ if (isset($_SESSION["data-user"])) {
     if (edit_informasi($_POST) > 0) {
       $_SESSION["message-success"] = "Data informasi berhasil diubah.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: informasi");
       exit();
     }
   }
@@ -339,7 +331,7 @@ if (isset($_SESSION["data-user"])) {
     if (delete_informasi($_POST) > 0) {
       $_SESSION["message-success"] = "Data informasi berhasil dihapus.";
       $_SESSION["time-message"] = time();
-      header("Location: " . $_SESSION["page-url"]);
+      header("Location: informasi");
       exit();
     }
   }

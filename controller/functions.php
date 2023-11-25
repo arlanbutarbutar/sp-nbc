@@ -1,5 +1,5 @@
 <?php require_once("support_code.php");
-function bayes($nama, $id_rawat, $id_jenis_kelamin, $id_usia, $id_idap)
+function bayes($nama, $id_jenis_kelamin, $id_usia, $alamat)
 {
   global $conn;
 
@@ -121,7 +121,7 @@ function bayes($nama, $id_rawat, $id_jenis_kelamin, $id_usia, $id_idap)
     $nilai_n_class[$key_penyakit_all] = [
       'class' => $value_penyakit_all['nama'],
       'n' => $n[$key_penyakit_all],
-      'p' => 1 / count($gejala_terpilih),
+      'p' => 1 / count($penyakit_all),
       'm' => count($gejala_all),
     ];
     $nilai_n_class[$key_penyakit_all]['nc'] = $nc[$key_penyakit_all];
@@ -140,23 +140,19 @@ function bayes($nama, $id_rawat, $id_jenis_kelamin, $id_usia, $id_idap)
 
       $nilai_p_a_v_p[$key_penyakit_all]['probabilitas'][$key_gejala_terpilih]['kode_gejala'] = $value_gejala_terpilih['kode'];
 
-      $nilai_p_a_v_p[$key_penyakit_all]['probabilitas'][$key_gejala_terpilih]['nilai'] = ($nilai_n_class[$key_penyakit_all]['nc'][$key_gejala_terpilih] + $nilai_n_class[$key_penyakit_all]['m'] * $nilai_n_class[$key_penyakit_all]['p']) / ($nilai_n_class[$key_penyakit_all]['nc'][$key_gejala_terpilih] + $nilai_n_class[$key_penyakit_all]['m']);
+      $nilai_p_a_v_p[$key_penyakit_all]['probabilitas'][$key_gejala_terpilih]['nilai'] = (($nilai_n_class[$key_penyakit_all]['nc'][$key_gejala_terpilih] + ($nilai_n_class[$key_penyakit_all]['m'] * $nilai_n_class[$key_penyakit_all]['p'])) / ($nilai_n_class[$key_penyakit_all]['n'] + $nilai_n_class[$key_penyakit_all]['m']));
     }
   }
 
-  // Proses 3  :				
-  // Menghitung P(ai|vj) x P(vj) untuk tiap v	
+  // Proses 3:
+  // Menghitung P(ai|vj) x P(vj) untuk tiap v
   $nilai_p_a_v_v = [];
   foreach ($penyakit_all as $key_penyakit_all => $value_penyakit_all) {
 
-    $total_nilai_p_a_v_p[$key_penyakit_all] = 0;
+    $total_nilai_p_a_v_p[$key_penyakit_all] = 1; // Initialize with 1, not 0
     foreach ($gejala_terpilih as $key_gejala_terpilih => $value_gejala_terpilih) {
 
-      if ($key_gejala_terpilih == 0) {
-        $total_nilai_p_a_v_p[$key_penyakit_all] = $nilai_p_a_v_p[$key_penyakit_all]['probabilitas'][$key_gejala_terpilih]['nilai'];
-      }
-
-      $total_nilai_p_a_v_p[$key_penyakit_all] = $total_nilai_p_a_v_p[$key_penyakit_all] * $nilai_p_a_v_p[$key_penyakit_all]['probabilitas'][$key_gejala_terpilih]['nilai'];
+      $total_nilai_p_a_v_p[$key_penyakit_all] *= $nilai_p_a_v_p[$key_penyakit_all]['probabilitas'][$key_gejala_terpilih]['nilai'];
     }
 
     $nilai_p_a_v_v[$key_penyakit_all]['class'] = $value_penyakit_all['kode'];
@@ -168,7 +164,7 @@ function bayes($nama, $id_rawat, $id_jenis_kelamin, $id_usia, $id_idap)
 
   $nilai_p_a_v_v_rsort = bubble_sort($nilai_p_a_v_v, 'v_max');
 
-  $hasil_klasifikasi = hasil_klasifikasi($nama, $id_rawat, $id_jenis_kelamin, $id_usia, $id_idap, $nilai_p_a_v_v_rsort);
+  hasil_klasifikasi($nama, $id_jenis_kelamin, $id_usia, $alamat, $nilai_p_a_v_v_rsort);
 
   return $nilai_p_a_v_v_rsort;
 }
@@ -191,7 +187,7 @@ function bubble_sort($arr, $key)
 
   return $arr;
 }
-function hasil_klasifikasi($nama, $id_rawat, $id_jenis_kelamin, $id_usia, $id_idap, $nilai_p_a_v_v_rsort)
+function hasil_klasifikasi($nama, $id_jenis_kelamin, $id_usia, $alamat, $nilai_p_a_v_v_rsort)
 {
   global $conn;
   $checkID = mysqli_query($conn, "SELECT * FROM data_uji ORDER BY id_uji DESC LIMIT 1");
@@ -220,7 +216,7 @@ function hasil_klasifikasi($nama, $id_rawat, $id_jenis_kelamin, $id_usia, $id_id
     }
   }
 
-  $sql = "INSERT INTO data_uji(id_uji,nama,id_rawat,id_jenis_kelamin,id_usia,id_penyakit,id_lama_idap) VALUES('$id_uji','$nama','$id_rawat','$id_jenis_kelamin','$id_usia','$id_penyakit','$id_idap')";
+  $sql = "INSERT INTO data_uji(id_uji,nama,alamat,id_jenis_kelamin,id_usia,id_penyakit) VALUES('$id_uji','$nama','$alamat','$id_jenis_kelamin','$id_usia','$id_penyakit')";
   mysqli_query($conn, $sql);
 
   //menyusun array gejala terpilih
@@ -243,18 +239,16 @@ if (!isset($_SESSION["data-user"])) {
   {
     global $conn;
     $nama = valid($data['nama']);
-    $id_rawat = valid($data['id_rawat']);
     $id_jenis_kelamin = valid($data['id_jenis_kelamin']);
     $id_usia = valid($data['id_usia']);
-    $id_idap = valid($data['id_idap']);
+    $alamat = valid($data['alamat']);
     $checklist = $data['checklist'];
     $akses = 2;
     $_SESSION['data-konsultasi'] = [
       'nama' => $nama,
-      'id_rawat' => $id_rawat,
       'id_jenis_kelamin' => $id_jenis_kelamin,
       'id_usia' => $id_usia,
-      'id_idap' => $id_idap,
+      'alamat' => $alamat,
       'gejala' => $checklist,
       'akses' => $akses
     ];
@@ -354,12 +348,11 @@ if (isset($_SESSION["data-user"])) {
   {
     global $conn;
     $nama = valid($data['nama']);
-    $id_rawat = valid($data['id_rawat']);
     $id_jenis_kelamin = valid($data['id_jenis_kelamin']);
     $id_usia = valid($data['id_usia']);
     $id_penyakit = valid($data['id_penyakit']);
-    $id_lama_idap = valid($data['id_lama_idap']);
-    mysqli_query($conn, "INSERT INTO data_latih(nama,id_rawat,id_jenis_kelamin,id_usia,id_penyakit,id_lama_idap) VALUES('$nama','$id_rawat','$id_jenis_kelamin','$id_usia','$id_penyakit','$id_lama_idap')");
+    $alamat = valid($data['alamat']);
+    mysqli_query($conn, "INSERT INTO data_latih(nama,alamat,id_jenis_kelamin,id_usia,id_penyakit) VALUES('$nama','$alamat','$id_jenis_kelamin','$id_usia','$id_penyakit')");
     return mysqli_affected_rows($conn);
   }
   function edit_data_latih($data)
@@ -367,12 +360,11 @@ if (isset($_SESSION["data-user"])) {
     global $conn;
     $id_latih = valid($data['id_latih']);
     $nama = valid($data['nama']);
-    $id_rawat = valid($data['id_rawat']);
     $id_jenis_kelamin = valid($data['id_jenis_kelamin']);
     $id_usia = valid($data['id_usia']);
     $id_penyakit = valid($data['id_penyakit']);
-    $id_lama_idap = valid($data['id_lama_idap']);
-    mysqli_query($conn, "UPDATE data_latih SET nama='$nama', id_rawat='$id_rawat', id_jenis_kelamin='$id_jenis_kelamin', id_usia='$id_usia', id_penyakit='$id_penyakit', id_lama_idap='$id_lama_idap' updated_at=current_timestamp WHERE id_latih='$id_latih'");
+    $alamat = valid($data['alamat']);
+    mysqli_query($conn, "UPDATE data_latih SET nama='$nama', alamat='$alamat', id_jenis_kelamin='$id_jenis_kelamin', id_usia='$id_usia', id_penyakit='$id_penyakit', updated_at=current_timestamp WHERE id_latih='$id_latih'");
     return mysqli_affected_rows($conn);
   }
   function delete_data_latih($data)
@@ -530,18 +522,16 @@ if (isset($_SESSION["data-user"])) {
   {
     global $conn;
     $nama = valid($data['nama']);
-    $id_rawat = valid($data['id_rawat']);
     $id_jenis_kelamin = valid($data['id_jenis_kelamin']);
     $id_usia = valid($data['id_usia']);
-    $id_idap = valid($data['id_idap']);
+    $alamat = valid($data['alamat']);
     $checklist = $data['checklist'];
     $akses = 2;
     $_SESSION['data-klasifikasi'] = [
       'nama' => $nama,
-      'id_rawat' => $id_rawat,
       'id_jenis_kelamin' => $id_jenis_kelamin,
       'id_usia' => $id_usia,
-      'id_idap' => $id_idap,
+      'alamat' => $alamat,
       'gejala' => $checklist,
       'akses' => $akses
     ];

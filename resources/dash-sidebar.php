@@ -43,12 +43,6 @@
             <span class="menu-title">Solusi</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" style="cursor: pointer;" onclick="window.location.href='obat'">
-            <i class="mdi mdi-bowl menu-icon"></i>
-            <span class="menu-title">Obat</span>
-          </a>
-        </li>
       <?php } ?>
       <li class="nav-item">
         <a class="nav-link" style="cursor: pointer;" onclick="window.location.href='klasifikasi'">

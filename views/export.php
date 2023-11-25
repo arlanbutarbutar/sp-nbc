@@ -13,10 +13,9 @@ header("Content-Disposition: attachment; filename=laporan-data-uji-pasien-rsupp-
     <tr>
       <th scope="col">No</th>
       <th scope="col" class="text-center">Nama</th>
-      <th scope="col" class="text-center">Jenis Rawat</th>
       <th scope="col" class="text-center">Jenis Kelamin</th>
       <th scope="col" class="text-center">Usia</th>
-      <th scope="col" class="text-center">Lama Idap</th>
+      <th scope="col" class="text-center">Alamat</th>
       <th scope="col" class="text-center">Penyakit</th>
     </tr>
   </thead>
@@ -27,10 +26,9 @@ header("Content-Disposition: attachment; filename=laporan-data-uji-pasien-rsupp-
         <tr>
           <th scope="row"><?= $no++ ?></th>
           <td><?= $row["nama"] ?></td>
-          <td><?= $row["rawat"] ?></td>
           <td><?= $row["jenis_kelamin"] ?></td>
           <td><?= $row["usia"] ?></td>
-          <td><?= $row["lama_idap"] ?></td>
+          <td><?= $row["alamat"] ?></td>
           <td><?= $row["nama_penyakit"] ?></td>
         </tr>
     <?php }

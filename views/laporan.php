@@ -51,10 +51,9 @@ $_SESSION["page-url"] = "laporan";
                           <tr>
                             <th scope="col" class="text-center">#</th>
                             <th scope="col" class="text-center">Nama</th>
-                            <th scope="col" class="text-center">Jenis Rawat</th>
                             <th scope="col" class="text-center">Jenis Kelamin</th>
                             <th scope="col" class="text-center">Usia</th>
-                            <th scope="col" class="text-center">Lama Idap</th>
+                            <th scope="col" class="text-center">Alamat</th>
                             <th scope="col" class="text-center">Penyakit</th>
                             <th scope="col" class="text-center">Aksi</th>
                           </tr>
@@ -66,10 +65,9 @@ $_SESSION["page-url"] = "laporan";
                               <tr>
                                 <th scope="row"><?= $no++ ?></th>
                                 <td><?= $row["nama"] ?></td>
-                                <td><?= $row["rawat"] ?></td>
                                 <td><?= $row["jenis_kelamin"] ?></td>
                                 <td><?= $row["usia"] ?></td>
-                                <td><?= $row["lama_idap"] ?></td>
+                                <td><?= $row["alamat"] ?></td>
                                 <td><?= $row["nama_penyakit"] ?></td>
                                 <td class="d-flex justify-content-center">
                                   <div class="col">

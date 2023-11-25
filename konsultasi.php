@@ -51,15 +51,6 @@ $_SESSION["page-url"] = "konsultasi";
                   <input type="text" name="nama" class="form-control" id="nama" minlength="3" placeholder="Nama Pasien" required>
                 </div>
                 <div class="mb-3">
-                  <label for="id_rawat" class="form-label">Rawat <small class="text-danger">*</small></label>
-                  <select name="id_rawat" class="form-control" aria-label="Default select example" required>
-                    <option selected value="">Pilih Rawat</option>
-                    <?php foreach ($selectRawat as $row_rawat) : ?>
-                      <option value="<?= $row_rawat['id_rawat'] ?>"><?= $row_rawat['rawat'] ?></option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
-                <div class="mb-3">
                   <label for="id_jenis_kelamin" class="form-label">Jenis Kelamin <small class="text-danger">*</small></label>
                   <select name="id_jenis_kelamin" class="form-control" aria-label="Default select example" required>
                     <option selected value="">Pilih Jenis Kelamin</option>
@@ -78,13 +69,8 @@ $_SESSION["page-url"] = "konsultasi";
                   </select>
                 </div>
                 <div class="mb-3">
-                  <label for="id_idap" class="form-label">Lama Idap <small class="text-danger">*</small></label>
-                  <select name="id_idap" class="form-control" aria-label="Default select example" required>
-                    <option selected value="">Pilih Lama Idap</option>
-                    <?php foreach ($selectLama_idap as $row_li) : ?>
-                      <option value="<?= $row_li['id_idap'] ?>"><?= $row_li['lama_idap'] ?></option>
-                    <?php endforeach; ?>
-                  </select>
+                  <label for="alamat" class="form-label">Alamat <small class="text-danger">*</small></label>
+                  <input type="text" name="alamat" class="form-control" id="alamat" minlength="3" placeholder="Alamat" required>
                 </div>
                 <div class="text-button">
                   <button type="submit" name="konsultasi" class="btn btn-primary text-white me-0 rounded-0 mt-3">Submit <i class="fa fa-arrow-right"></i></button>
@@ -94,11 +80,6 @@ $_SESSION["page-url"] = "konsultasi";
 
               // Inisialisasi Data Session
               $nama = valid($_SESSION['data-konsultasi']['nama']);
-
-              $id_rawat = valid($_SESSION['data-konsultasi']['id_rawat']);
-              $takeRawat = mysqli_query($conn, "SELECT * FROM rawat WHERE id_rawat='$id_rawat'");
-              $rowTakeRawat = mysqli_fetch_assoc($takeRawat);
-              $rawat = $rowTakeRawat['rawat'];
 
               $id_jenis_kelamin = valid($_SESSION['data-konsultasi']['id_jenis_kelamin']);
               $takeJK = mysqli_query($conn, "SELECT * FROM jenis_kelamin WHERE id_jenis_kelamin='$id_jenis_kelamin'");
@@ -110,10 +91,7 @@ $_SESSION["page-url"] = "konsultasi";
               $rowTakeUsia = mysqli_fetch_assoc($takeUsia);
               $usia = $rowTakeUsia['usia'];
 
-              $id_idap = valid($_SESSION['data-konsultasi']['id_idap']);
-              $takeIdap = mysqli_query($conn, "SELECT * FROM lama_idap WHERE id_idap='$id_idap'");
-              $rowTakeIdap = mysqli_fetch_assoc($takeIdap);
-              $lama_idap = $rowTakeIdap['lama_idap']; ?>
+              $alamat = valid($_SESSION['data-konsultasi']['alamat']); ?>
               <h4>Biodata Anda :</h4>
               <div class="table-responsive">
                 <table class="table table-striped table-hover table-sm">
@@ -122,11 +100,6 @@ $_SESSION["page-url"] = "konsultasi";
                       <th scope="row" style="width: 200px;">Nama Pasien</th>
                       <td style="width: 10px;">:</td>
                       <td><?= $nama ?></td>
-                    </tr>
-                    <tr>
-                      <th scope="row" style="width: 200px;">Rawat</th>
-                      <td style="width: 10px;">:</td>
-                      <td><?= $rawat ?></td>
                     </tr>
                     <tr>
                       <th scope="row" style="width: 200px;">Jenis Kelamin</th>
@@ -139,9 +112,9 @@ $_SESSION["page-url"] = "konsultasi";
                       <td><?= $usia ?></td>
                     </tr>
                     <tr>
-                      <th scope="row" style="width: 200px;">Lama Idap</th>
+                      <th scope="row" style="width: 200px;">Alamat</th>
                       <td style="width: 10px;">:</td>
-                      <td><?= $lama_idap ?></td>
+                      <td><?= $alamat ?></td>
                     </tr>
                   </tbody>
                 </table>
@@ -176,14 +149,12 @@ $_SESSION["page-url"] = "konsultasi";
                       </tbody>
                     </table>
                     <input type="hidden" name="nama" value="<?= $nama ?>">
-                    <input type="hidden" name="id_rawat" value="<?= $id_rawat ?>">
                     <input type="hidden" name="id_jenis_kelamin" value="<?= $id_jenis_kelamin ?>">
                     <input type="hidden" name="id_usia" value="<?= $id_usia ?>">
-                    <input type="hidden" name="id_idap" value="<?= $id_idap ?>">
+                    <input type="hidden" name="alamat" value="<?= $alamat ?>">
                     <button type="submit" name="klasifikasi" class="btn btn-primary btn-sm rounded-0 text-white border-0 mt-3">Analisis Sekarang</button>
                   </form>
-                <?php }
-                if ($_SESSION['data-konsultasi']['akses'] == 2) {
+                <?php } else if ($_SESSION['data-konsultasi']['akses'] == 2) {
                   $gejala_checklist = $_SESSION['data-konsultasi']['gejala'];
 
                   $gejalaList = implode("', '", $gejala_checklist);
@@ -203,18 +174,16 @@ $_SESSION["page-url"] = "konsultasi";
                       <?php } ?>
                     </tbody>
                   </table>
-                <?php } ?>
               </div>
               <hr>
               <h4>Hasil Diagnosa :</h4>
               <?php
-              $nama = valid($_SESSION['data-konsultasi']['nama']);
-              $id_rawat = valid($_SESSION['data-konsultasi']['id_rawat']);
-              $id_jenis_kelamin = valid($_SESSION['data-konsultasi']['id_jenis_kelamin']);
-              $id_usia = valid($_SESSION['data-konsultasi']['id_usia']);
-              $id_idap = valid($_SESSION['data-konsultasi']['id_idap']);
+                  $nama = valid($_SESSION['data-konsultasi']['nama']);
+                  $id_jenis_kelamin = valid($_SESSION['data-konsultasi']['id_jenis_kelamin']);
+                  $id_usia = valid($_SESSION['data-konsultasi']['id_usia']);
+                  $alamat = valid($_SESSION['data-konsultasi']['alamat']);
 
-              $data_klasifikasi = bayes($nama, $id_rawat, $id_jenis_kelamin, $id_usia, $id_idap); ?>
+                  $data_klasifikasi = bayes($nama, $id_jenis_kelamin, $id_usia, $alamat); ?>
 
               <div class="row">
                 <div class="col-lg-6">
@@ -338,6 +307,7 @@ $_SESSION["page-url"] = "konsultasi";
                 <?php } ?>
                 </div>
               </div>
+            <?php } ?>
           </div>
         </div>
       </div>

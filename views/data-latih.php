@@ -51,11 +51,9 @@ $_SESSION["page-url"] = "data-latih";
                           <tr>
                             <th scope="col" class="text-center">#</th>
                             <th scope="col" class="text-center">Nama</th>
-                            <th scope="col" class="text-center">Jenis Rawat</th>
                             <th scope="col" class="text-center">Jenis Kelamin</th>
                             <th scope="col" class="text-center">Usia</th>
-                            <th scope="col" class="text-center">Lama Idap</th>
-                            <th scope="col" class="text-center">Penyakit</th>
+                            <th scope="col" class="text-center">Alamat</th>
                             <th scope="col" class="text-center">Tgl Buat</th>
                             <th scope="col" class="text-center">Tgl Ubah</th>
                             <th scope="col" class="text-center">Aksi</th>
@@ -68,11 +66,9 @@ $_SESSION["page-url"] = "data-latih";
                               <tr>
                                 <th scope="row"><?= $no; ?></th>
                                 <td><?= $row["nama"] ?></td>
-                                <td><?= $row["rawat"] ?></td>
                                 <td><?= $row["jenis_kelamin"] ?></td>
                                 <td><?= $row["usia"] ?></td>
-                                <td><?= $row["lama_idap"] ?></td>
-                                <td><?= $row["nama_penyakit"] ?></td>
+                                <td><?= $row["alamat"] ?></td>
                                 <td>
                                   <div class="badge badge-opacity-success">
                                     <?php $dateCreate = date_create($row["created_at"]);
@@ -101,53 +97,43 @@ $_SESSION["page-url"] = "data-latih";
                                             <div class="modal-body text-center">
                                               <div class="mb-3">
                                                 <label for="nama" class="form-label">Nama Pasien <small class="text-danger">*</small></label>
-                                                <input type="text" name="nama" class="form-control text-center" id="nama" minlength="3" placeholder="Nama Pasien" required>
-                                              </div>
-                                              <div class="mb-3">
-                                                <label for="id_rawat" class="form-label">Jenis Rawat <small class="text-danger">*</small></label>
-                                                <select name="id_rawat" class="form-select" aria-label="Default select example" required>
-                                                  <option selected value="<?= $row['id_rawat'] ?>"><?= $row['rawat'] ?></option>
-                                                  <?php $id_rawat = $row['id_rawat'];
-                                                  $selectRawatEdit = mysqli_query($conn, "SELECT * FROM rawat WHERE id_rawat!='$id_rawat'");
-                                                  foreach ($selectRawatEdit as $row_rawat) : ?>
-                                                    <option value="<?= $row_rawat['id_rawat'] ?>"><?= $row_rawat['rawat'] ?></option>
-                                                  <?php endforeach; ?>
-                                                </select>
+                                                <input type="text" name="nama" value="<?= $row["nama"] ?>" class="form-control text-center" id="nama" minlength="3" placeholder="Nama Pasien" required>
                                               </div>
                                               <div class="mb-3">
                                                 <label for="id_jenis_kelamin" class="form-label">Jenis Kelamin <small class="text-danger">*</small></label>
                                                 <select name="id_jenis_kelamin" class="form-select" aria-label="Default select example" required>
                                                   <option selected value="">Pilih Jenis Kelamin</option>
-                                                  <?php foreach ($selectJenis_kelamin as $row_jk) : ?>
-                                                    <option value="<?= $row_jk['id_jenis_kelamin'] ?>"><?= $row_jk['jenis_kelamin'] ?></option>
-                                                  <?php endforeach; ?>
+                                                  <?php $id_jenis_kelamin = $row['id_jenis_kelamin'];
+                                                  foreach ($selectJenis_kelamin as $row_jk) {
+                                                    $selected = ($row_jk['id_jenis_kelamin'] == $id_jenis_kelamin) ? 'selected' : ''; ?>
+                                                    <option value="<?= $row_jk['id_jenis_kelamin'] ?>" <?= $selected ?>><?= $row_jk['jenis_kelamin'] ?></option>
+                                                  <?php }  ?>
                                                 </select>
                                               </div>
                                               <div class="mb-3">
                                                 <label for="id_usia" class="form-label">Usia <small class="text-danger">*</small></label>
                                                 <select name="id_usia" class="form-select" aria-label="Default select example" required>
                                                   <option selected value="">Pilih Usia</option>
-                                                  <?php foreach ($selectUsia as $row_usia) : ?>
-                                                    <option value="<?= $row_usia['id_usia'] ?>"><?= $row_usia['usia'] ?></option>
-                                                  <?php endforeach; ?>
+                                                  <?php $id_usia = $row['id_usia'];
+                                                  foreach ($selectUsia as $row_usia) {
+                                                    $selected = ($row_usia['id_usia'] == $id_usia) ? 'selected' : ''; ?>
+                                                    <option value="<?= $row_usia['id_usia'] ?>" <?= $selected ?>><?= $row_usia['usia'] ?></option>
+                                                  <?php }  ?>
                                                 </select>
                                               </div>
                                               <div class="mb-3">
-                                                <label for="id_lama_idap" class="form-label">Lama Idap <small class="text-danger">*</small></label>
-                                                <select name="id_lama_idap" class="form-select" aria-label="Default select example" required>
-                                                  <option selected value="">Pilih Lama Idap</option>
-                                                  <?php foreach ($selectLama_idap as $row_idap) : ?>
-                                                    <option value="<?= $row_idap['id_idap'] ?>"><?= $row_idap['lama_idap'] ?></option>
-                                                  <?php endforeach; ?>
-                                                </select>
+                                                <label for="alamat" class="form-label">Alamat <small class="text-danger">*</small></label>
+                                                <input type="text" name="alamat" class="form-control text-center" id="alamat" minlength="3" placeholder="Alamat" required>
                                               </div>
                                               <div class="mb-3">
                                                 <label for="id_penyakit" class="form-label">Penyakit <small class="text-danger">*</small></label>
                                                 <select name="id_penyakit" class="form-select" aria-label="Default select example" required>
                                                   <option selected value="">Pilih Penyakit</option>
-                                                  <?php foreach ($selectPenyakit as $row_penyakit) : ?>
-                                                    <option value="<?= $row_penyakit['id_penyakit'] ?>"><?= $row_penyakit['nama_penyakit'] ?></option>
-                                                  <?php endforeach; ?>
+                                                  <?php $id_penyakit = $row['id_penyakit'];
+                                                  foreach ($selectPenyakit as $row_penyakit) {
+                                                    $selected = ($row_penyakit['id_penyakit'] == $id_penyakit) ? 'selected' : ''; ?>
+                                                    <option value="<?= $row_penyakit['id_penyakit'] ?>" <?= $selected ?>><?= $row_penyakit['nama_penyakit'] ?></option>
+                                                  <?php }  ?>
                                                 </select>
                                               </div>
                                             </div>
@@ -215,15 +201,6 @@ $_SESSION["page-url"] = "data-latih";
                     <input type="text" name="nama" class="form-control text-center" id="nama" minlength="3" placeholder="Nama Pasien" required>
                   </div>
                   <div class="mb-3">
-                    <label for="id_rawat" class="form-label">Jenis Rawat <small class="text-danger">*</small></label>
-                    <select name="id_rawat" class="form-select" aria-label="Default select example" required>
-                      <option selected value="">Pilih Rawat</option>
-                      <?php foreach ($selectRawat as $row_rawat) : ?>
-                        <option value="<?= $row_rawat['id_rawat'] ?>"><?= $row_rawat['rawat'] ?></option>
-                      <?php endforeach; ?>
-                    </select>
-                  </div>
-                  <div class="mb-3">
                     <label for="id_jenis_kelamin" class="form-label">Jenis Kelamin <small class="text-danger">*</small></label>
                     <select name="id_jenis_kelamin" class="form-select" aria-label="Default select example" required>
                       <option selected value="">Pilih Jenis Kelamin</option>
@@ -242,13 +219,8 @@ $_SESSION["page-url"] = "data-latih";
                     </select>
                   </div>
                   <div class="mb-3">
-                    <label for="id_lama_idap" class="form-label">Lama Idap <small class="text-danger">*</small></label>
-                    <select name="id_lama_idap" class="form-select" aria-label="Default select example" required>
-                      <option selected value="">Pilih Lama Idap</option>
-                      <?php foreach ($selectLama_idap as $row_idap) : ?>
-                        <option value="<?= $row_idap['id_idap'] ?>"><?= $row_idap['lama_idap'] ?></option>
-                      <?php endforeach; ?>
-                    </select>
+                    <label for="alamat" class="form-label">Alamat <small class="text-danger">*</small></label>
+                    <input type="text" name="alamat" class="form-control text-center" id="alamat" minlength="3" placeholder="Alamat" required>
                   </div>
                   <div class="mb-3">
                     <label for="id_penyakit" class="form-label">Penyakit <small class="text-danger">*</small></label>
