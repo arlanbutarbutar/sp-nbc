@@ -43,6 +43,12 @@
             <span class="menu-title">Solusi</span>
           </a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" style="cursor: pointer;" onclick="window.location.href='akuisisi'">
+            <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+            <span class="menu-title">Akuisisi</span>
+          </a>
+        </li>
       <?php } ?>
       <li class="nav-item">
         <a class="nav-link" style="cursor: pointer;" onclick="window.location.href='klasifikasi'">

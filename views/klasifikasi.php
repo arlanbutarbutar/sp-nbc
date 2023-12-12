@@ -315,8 +315,9 @@ $_SESSION["page-url"] = "klasifikasi";
                             $id_jenis_kelamin = valid($_SESSION['data-klasifikasi']['id_jenis_kelamin']);
                             $id_usia = valid($_SESSION['data-klasifikasi']['id_usia']);
                             $alamat = valid($_SESSION['data-klasifikasi']['alamat']);
+                            $gejala_checklist = $_SESSION['data-klasifikasi']['gejala'];
 
-                            $data_klasifikasi = bayes($nama, $id_jenis_kelamin, $id_usia, $alamat);
+                            $data_klasifikasi = bayes($nama, $id_jenis_kelamin, $id_usia, $alamat, $gejala_checklist);
                           ?>
                             <div class="row">
                               <div class="col-md-12">

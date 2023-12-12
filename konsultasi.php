@@ -142,7 +142,7 @@ $_SESSION["page-url"] = "konsultasi";
                                   <input class="form-check-input" name="checklist[<?= $no++ ?>]" style="margin-left: 0;font-size: 20px;" type="checkbox" value="<?= $rowG['id_gejala'] ?>">
                                 </div>
                               </th>
-                              <td><?= $rowG["gejala"] ?></td>
+                              <td><?= $rowG["kode_gejala"] . " - " . $rowG["gejala"] ?></td>
                             </tr>
                         <?php }
                         } ?>
@@ -182,8 +182,9 @@ $_SESSION["page-url"] = "konsultasi";
                   $id_jenis_kelamin = valid($_SESSION['data-konsultasi']['id_jenis_kelamin']);
                   $id_usia = valid($_SESSION['data-konsultasi']['id_usia']);
                   $alamat = valid($_SESSION['data-konsultasi']['alamat']);
+                  $gejala_checklist = $_SESSION['data-konsultasi']['gejala'];
 
-                  $data_klasifikasi = bayes($nama, $id_jenis_kelamin, $id_usia, $alamat); ?>
+                  $data_klasifikasi = bayes($nama, $id_jenis_kelamin, $id_usia, $alamat, $gejala_checklist); ?>
 
               <div class="row">
                 <div class="col-lg-6">

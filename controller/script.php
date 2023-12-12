@@ -335,4 +335,22 @@ if (isset($_SESSION["data-user"])) {
       exit();
     }
   }
+
+  $akuisisi = mysqli_query($conn, "SELECT * FROM akuisisi JOIN gejala ON akuisisi.id_gejala=gejala.id_gejala JOIN penyakit ON akuisisi.id_penyakit=penyakit.id_penyakit");
+  if (isset($_POST["tambah-akuisisi"])) {
+    if (add_akuisisi($_POST) > 0) {
+      $_SESSION["message-success"] = "Data akuisisi berhasil ditambahkan.";
+      $_SESSION["time-message"] = time();
+      header("Location: akuisisi");
+      exit();
+    }
+  }
+  if (isset($_POST["hapus-akuisisi"])) {
+    if (delete_akuisisi($_POST) > 0) {
+      $_SESSION["message-success"] = "Data akuisisi berhasil dihapus.";
+      $_SESSION["time-message"] = time();
+      header("Location: akuisisi");
+      exit();
+    }
+  }
 }

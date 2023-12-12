@@ -1,5 +1,5 @@
 <?php require_once("support_code.php");
-function bayes($nama, $id_jenis_kelamin, $id_usia, $alamat)
+function bayes($nama, $id_jenis_kelamin, $id_usia, $alamat, $gejala)
 {
   global $conn;
 
@@ -9,7 +9,8 @@ function bayes($nama, $id_jenis_kelamin, $id_usia, $alamat)
 
   // menyusun array penyakit
   $penyakit_all = array();
-  $query_penyakit = mysqli_query($conn, "SELECT * FROM penyakit");
+  $gejalaList = implode("', '", $gejala);
+  $query_penyakit = mysqli_query($conn, "SELECT * FROM penyakit JOIN akuisisi ON penyakit.id_penyakit=akuisisi.id_penyakit WHERE akuisisi.id_gejala IN ('$gejalaList')");
   foreach ($query_penyakit as $row) {
     $penyakit_all[$row['id_penyakit']] = array(
       'kode' => $row['kode_penyakit'],
@@ -566,6 +567,21 @@ if (isset($_SESSION["data-user"])) {
     global $conn;
     $id = valid($data['id']);
     mysqli_query($conn, "DELETE FROM informasi WHERE id='$id'");
+    return mysqli_affected_rows($conn);
+  }
+  function add_akuisisi($data)
+  {
+    global $conn;
+    $id_gejala = valid($data['id_gejala']);
+    $id_penyakit = $data['id_penyakit'];
+    mysqli_query($conn, "INSERT INTO akuisisi(id_gejala,id_penyakit) VALUES('$id_gejala','$id_penyakit')");
+    return mysqli_affected_rows($conn);
+  }
+  function delete_akuisisi($data)
+  {
+    global $conn;
+    $id_akuisisi = valid($data['id_akuisisi']);
+    mysqli_query($conn, "DELETE FROM akuisisi WHERE id_akuisisi='$id_akuisisi'");
     return mysqli_affected_rows($conn);
   }
 }
