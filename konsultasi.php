@@ -279,6 +279,7 @@ $_SESSION["page-url"] = "konsultasi";
                   <?php
                   $max_nilai = 0; // Inisialisasi nilai terbesar
                   $nama_penyakit = '';
+                  $nilai_terbesar = 0.0; // Inisialisasi nilai terbesar untuk ditampilkan
 
                   foreach ($data_klasifikasi as $key_value_klasifikasi => $value_klasifikasi) {
                     $kode_penyakit = $value_klasifikasi['class'];
@@ -290,6 +291,8 @@ $_SESSION["page-url"] = "konsultasi";
 
                       // Perbarui nilai terbesar dan nama penyakit terkait
                       if ($value_klasifikasi['v_max'] > $max_nilai) {
+                        $max_nilai = $value_klasifikasi['v_max'];
+                        $nilai_terbesar = floatval($max_nilai); // Konversi ke float
                         $nama_penyakit = $data_kp['nama_penyakit'];
                       }
                     }
